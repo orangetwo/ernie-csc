@@ -16,6 +16,6 @@
 ### 单卡训练
 
 ```python
-python train.py --batch_size 32 --logging_steps 100 --epochs 10 --learning_rate 5e-5  --max_seq_length 192
+python main.py --batch_size 32 --logging_steps 100 --epochs 10 --learning_rate 5e-5  --max_seq_length 192
 ```
 
