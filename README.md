@@ -2,6 +2,7 @@
 
 ## 简介
 本文主要用PyTorch实现了百度在ACL 2021上提出结合拼音特征的Softmask策略的中文错别字纠错的下游任务网络，并提供预训练模型，模型结构如下：
+
 ![image](https://user-images.githubusercontent.com/10826371/131974040-fc84ec04-566f-4310-9839-862bfb27172e.png)
 
 "Correcting Chinese Spelling Errors with Phonetic Pre-training"非官方实现。
