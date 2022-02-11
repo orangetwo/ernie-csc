@@ -39,7 +39,8 @@ def trainer(model, train_data_loader, eval_data_loader, args, device, vocab_size
     tic_train = time.time()
 
     model = model.to(device)
-    ce_loss = nn.CrossEntropyLoss(ignore_index=args.ignore_label)
+    ce_loss1 = nn.CrossEntropyLoss(ignore_index=args.ignore_label)
+    ce_loss2 = nn.CrossEntropyLoss(ignore_index=args.ignore_label, reduction='none')
 
     for epoch in range(args.epochs):
         for step, batch in enumerate(train_data_loader, start=1):
@@ -47,9 +48,10 @@ def trainer(model, train_data_loader, eval_data_loader, args, device, vocab_size
             input_ids, pinyin_ids, det_labels, corr_labels, length = tuple(t.to(device) for t in batch)
             det_error_probs, corr_logits, det_logits = model(input_ids, pinyin_ids)
 
-            det_loss = ce_loss(det_logits.view(-1, 2), det_labels.view(-1))
-            corr_loss = ce_loss(corr_logits.view(-1, vocab_size), corr_labels.view(-1))
-            loss = det_loss + corr_loss
+            det_loss = ce_loss1(det_logits.view(-1, 2), det_labels.view(-1))
+
+            corr_loss = torch.dot(ce_loss2(corr_logits.view(-1, vocab_size), corr_labels.view(-1)), det_error_probs.max(axis=-1)[0].reshape(-1))
+            loss = det_loss + corr_loss / corr_logits.shape[0]
 
             loss.backward()
             optimizer.step()

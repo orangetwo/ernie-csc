@@ -36,7 +36,7 @@ def convert_example(example,
                     tokenizer,
                     pinyin_vocab,
                     max_seq_length=128,
-                    ignore_label=-1,
+                    ignore_label=-100,
                     is_test=False):
     source = example["source"]
     words = list(source)
